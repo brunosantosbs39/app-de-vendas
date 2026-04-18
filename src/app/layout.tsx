@@ -47,8 +47,10 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#0F0F0F] text-[#F8F8F8]">
-        <main className="flex-1 overflow-x-hidden"><AuthProvider>{children}</AuthProvider></main>
-        <BottomNav />
+        <AuthProvider>
+          <main className="flex-1 overflow-x-hidden">{children}</main>
+          <BottomNav />
+        </AuthProvider>
       </body>
     </html>
   );
