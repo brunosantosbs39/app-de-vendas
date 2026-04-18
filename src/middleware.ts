@@ -25,16 +25,22 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
   const { pathname } = request.nextUrl;
   const isPublic = PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 
+  let user = null;
+  try {
+    const result = await supabase.auth.getUser();
+    user = result.data.user;
+  } catch {
+    // Supabase Auth unreachable. Public paths pass through; protected paths redirect to login.
+    if (isPublic) return response;
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
   if (!user && !isPublic) {
     const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("redirectTo", pathname);
+    loginUrl.searchParams.set("redirectTo", `${pathname}${request.nextUrl.search}`);
     return NextResponse.redirect(loginUrl);
   }
 
@@ -46,5 +52,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|manifest.json).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|manifest.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)"],
 };
