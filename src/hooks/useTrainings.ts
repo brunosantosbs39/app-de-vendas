@@ -12,16 +12,13 @@ export interface Training {
   category: 'Vídeo' | 'Script' | 'Guia';
   min_level_required: number;
   xp_reward: number;
+  module_name?: string;
 }
 
 export function useTrainings() {
   const { user } = useAuth();
   const [trainings, setTrainings] = useState<Training[]>([]);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchTrainings();
-  }, []);
 
   const fetchTrainings = async () => {
     try {
@@ -39,6 +36,13 @@ export function useTrainings() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchTrainings();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   const uploadVideo = async (file: File) => {
     try {

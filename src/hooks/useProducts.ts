@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/useAuth';
+import { offlineStore } from '@/lib/offlineStore';
 
 export interface Product {
   id: string;
@@ -19,80 +20,76 @@ export function useProducts() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
+  const loadProducts = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .order('name', { ascending: true });
+      
+      // 1. Tenta carregar do Cache Local IMEDIATAMENTE
+      const cached = await offlineStore.getFromCache('products');
+      if (cached.length > 0) {
+        setProducts(cached);
+      }
 
-      if (error) throw error;
-      setProducts(data || []);
+      // 2. Se estiver online, busca do Supabase e atualiza o Cache
+      if (navigator.onLine) {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .order('name', { ascending: true });
+
+        if (!error && data) {
+          setProducts(data);
+          await offlineStore.saveToCache('products', data);
+        }
+      }
     } catch (error) {
-      console.error("Erro ao buscar produtos:", error);
+      console.error("Erro ao carregar produtos:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const addProduct = async (product: Omit<Product, 'id'>) => {
-    if (!user) throw new Error("Sessão expirada. Faça login novamente.");
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      loadProducts();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const addProduct = async (productData: Omit<Product, 'id'>) => {
+    if (!user) throw new Error("Sessão expirada.");
+    
     try {
-      const margin = ((product.price - product.cost_price) / product.price) * 100;
+      const margin = ((productData.price - productData.cost_price) / productData.price) * 100;
+      const newProduct = {
+        ...productData,
+        id: crypto.randomUUID(), // Gera ID local
+        margin_percent: margin,
+        user_id: user.id
+      };
 
-      const { error } = await supabase
-        .from('products')
-        .insert([{
-          ...product,
-          margin_percent: margin,
-          user_id: user.id
-        }]);
+      // SALVA LOCALMENTE E ADICIONA NA FILA DE SYNC
+      await offlineStore.addToSyncQueue('products', 'INSERT', newProduct);
+      
+      // Atualiza a UI imediatamente
+      setProducts(prev => [...prev, newProduct as any].sort((a, b) => a.name.localeCompare(b.name)));
 
-      if (error) throw error;
-      await fetchProducts();
       return { success: true };
     } catch (error) {
-      console.error("Erro ao adicionar produto:", error);
-      return { success: false, error };
-    }
-  };
-
-  const updateStock = async (productId: string, newQuantity: number) => {
-    try {
-      const { error } = await supabase
-        .from('products')
-        .update({ stock_quantity: newQuantity })
-        .eq('id', productId);
-
-      if (error) throw error;
-      await fetchProducts();
-      return { success: true };
-    } catch (error) {
-      console.error("Erro ao atualizar estoque:", error);
+      console.error("Erro ao adicionar produto offline:", error);
       return { success: false, error };
     }
   };
 
   const deleteProduct = async (productId: string) => {
     try {
-      const { error } = await supabase
-        .from('products')
-        .delete()
-        .eq('id', productId);
-
-      if (error) throw error;
-      await fetchProducts();
+      await offlineStore.addToSyncQueue('products', 'DELETE', { id: productId });
+      setProducts(prev => prev.filter(p => p.id !== productId));
       return { success: true };
     } catch (error) {
-      console.error("Erro ao deletar produto:", error);
       return { success: false, error };
     }
   };
 
-  return { products, loading, addProduct, updateStock, deleteProduct, refreshProducts: fetchProducts };
+  return { products, loading, addProduct, deleteProduct, refreshProducts: loadProducts };
 }

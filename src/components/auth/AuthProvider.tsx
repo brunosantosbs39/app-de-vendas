@@ -3,6 +3,8 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
+import { useSyncManager } from "@/hooks/useSyncManager";
+import { RefreshCw, CloudOff } from "lucide-react";
 
 type OAuthProvider = "google" | "github" | "facebook";
 
@@ -22,6 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const { isSyncing, pendingItems } = useSyncManager();
 
   useEffect(() => {
     let mounted = true;
@@ -78,6 +81,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{ user, session, loading, signIn, signUp, signInWithOAuth, signOut }}
     >
       {children}
+
+      {/* Indicador de Status Offline/Sincronização */}
+      <div className="fixed top-24 right-6 z-[200] flex flex-col items-end gap-2 pointer-events-none">
+        {pendingItems > 0 && (
+          <div className="bg-orange-500/20 text-orange-500 border border-orange-500/30 px-4 py-2 rounded-2xl flex items-center gap-2 text-[10px] font-black uppercase tracking-widest backdrop-blur-md">
+            <CloudOff size={14} /> {pendingItems} pendentes
+          </div>
+        )}
+        {isSyncing && (
+          <div className="bg-primary/20 text-primary border border-primary/30 px-4 py-2 rounded-2xl flex items-center gap-2 text-[10px] font-black uppercase tracking-widest backdrop-blur-md">
+            <RefreshCw size={14} className="animate-spin" /> Sincronizando...
+          </div>
+        )}
+      </div>
     </AuthContext.Provider>
   );
 }

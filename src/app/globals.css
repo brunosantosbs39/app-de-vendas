@@ -1,120 +1,66 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
+@import "leaflet/dist/leaflet.css";
 
 @custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Cores baseadas na imagem fornecida */
+  --background: #0F0F0F;
+  --foreground: #F8F8F8;
+  
+  --card: #202020;
+  --card-foreground: #F8F8F8;
+  
+  --popover: #0F0F0F;
+  --popover-foreground: #F8F8F8;
+  
+  --primary: #5DD62C; /* Verde Ácido / Neon */
+  --primary-foreground: #0F0F0F;
+  
+  --secondary: #337418; /* Verde Floresta / Escuro */
+  --secondary-foreground: #F8F8F8;
+  
+  --muted: #202020;
+  --muted-foreground: #A0A0A0;
+  
+  --accent: #5DD62C;
+  --accent-foreground: #0F0F0F;
+  
+  --destructive: #FF4444;
+  --destructive-foreground: #F8F8F8;
+  
+  --border: #333333;
+  --input: #202020;
+  --ring: #5DD62C;
+  
+  --radius: 2rem;
+}
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 1rem);
+  --radius-md: calc(var(--radius) - 0.5rem);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
-}
-
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --radius-xl: calc(var(--radius) + 0.5rem);
+  --radius-2xl: calc(var(--radius) + 1rem);
 }
 
 @layer base {
@@ -123,8 +69,317 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
   }
-  html {
-    @apply font-sans;
+}
+
+/* Glassmorphism de Luxo (Dark Mode) */
+.glass {
+  @apply bg-[#202020]/40 backdrop-blur-2xl border border-white/5 shadow-2xl;
+}
+
+.glass-green {
+  @apply bg-[#5DD62C]/5 backdrop-blur-3xl border border-[#5DD62C]/10 shadow-[#5DD62C]/5;
+}
+
+/* Efeito de Borda Animada (Glow) */
+.card-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-glow::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    transparent,
+    transparent,
+    transparent,
+    #5DD62C
+  );
+  animation: rotate-glow 6s linear infinite;
+  z-index: 0;
+  opacity: 0.15;
+}
+
+.card-glow-inner {
+  position: relative;
+  z-index: 1;
+  background: #202020;
+  margin: 1px;
+  height: calc(100% - 2px);
+  width: calc(100% - 2px);
+  border-radius: inherit;
+}
+
+@keyframes rotate-glow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Tipografia de Alto Impacto */
+h1, h2, h3 {
+  @apply font-black tracking-tighter text-[#F8F8F8];
+}
+
+/* Botões Ultra Profissionais */
+.btn-primary {
+  @apply bg-primary text-background sm:h-16 h-14 rounded-[1.5rem] px-10 font-black sm:text-xl text-lg 
+         transition-all duration-300 active:scale-95 
+         hover:shadow-[0_0_30px_rgba(93,214,44,0.3)] hover:-translate-y-1;
+}
+
+.btn-secondary {
+  @apply bg-secondary text-white sm:h-16 h-14 rounded-[1.5rem] px-10 font-black sm:text-xl text-lg 
+         transition-all duration-300 active:scale-95 border border-white/10;
+}
+
+/* Cards com Morphismo Suave */
+.card-morph {
+  @apply rounded-[2.5rem] sm:p-8 p-6 transition-all duration-500 
+         hover:bg-white/5 active:scale-[0.98] border border-white/5;
+}
+
+/* Bullet Points Estilizados (Sem Emojis) */
+.bullet-point {
+  @apply relative pl-8 before:content-[''] before:absolute before:left-0 before:top-1/2 
+         before:-translate-y-1/2 before:w-3 before:h-3 before:bg-primary 
+         before:rounded-full before:shadow-[0_0_10px_#5DD62C];
+}
+
+/* Scrollbar Customizada */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-card rounded-full;
+}
+
+/* Efeito Shiny do Modelo */
+.card-shiny {
+  --shiny-cta-bg: #202020;
+  --shiny-cta-bg-subtle: #1a1818;
+  --shiny-cta-fg: #ffffff;
+  --shiny-cta-highlight: #FFB026;
+  --shiny-cta-highlight-subtle: white;
+  --gradient-angle: 0deg;
+  --gradient-angle-offset: 0deg;
+  --gradient-percent: 5%;
+  --gradient-shine: white;
+  
+  isolation: isolate;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent !important;
+  background: linear-gradient(var(--shiny-cta-bg), var(--shiny-cta-bg)) padding-box,
+    conic-gradient(
+      from calc(var(--gradient-angle) - var(--gradient-angle-offset)),
+      transparent,
+      var(--shiny-cta-highlight) var(--gradient-percent),
+      var(--gradient-shine) calc(var(--gradient-percent) * 2),
+      var(--shiny-cta-highlight) calc(var(--gradient-percent) * 3),
+      transparent calc(var(--gradient-percent) * 4)
+    ) border-box !important;
+  box-shadow: inset 0 0 0 1px var(--shiny-cta-bg-subtle) !important;
+  animation: gradient-angle 3s linear infinite !important;
+}
+
+/* Estilo de Background e Layout do Modelo (Dashboard) */
+.card-dash-style {
+  @apply bg-[#202020]! border! border-white/5! rounded-[20px]! pt-[10px]! px-[10px]! pb-[40px]!;
+}
+
+.ambiente-style {
+  @apply pt-[50px]! pb-[50px]!;
+}
+
+@keyframes gradient-angle {
+  to {
+    --gradient-angle: 360deg;
   }
+}
+
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* ========== SHINY CTA BUTTON (verde do app) ========== */
+@property --gradient-angle-offset {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@property --gradient-percent {
+  syntax: "<percentage>";
+  initial-value: 5%;
+  inherits: false;
+}
+@property --gradient-shine {
+  syntax: "<color>";
+  initial-value: white;
+  inherits: false;
+}
+
+.shiny-cta {
+  --shiny-cta-bg: #0F0F0F;
+  --shiny-cta-bg-subtle: #1a1a1a;
+  --shiny-cta-fg: #ffffff;
+  --shiny-cta-highlight: #5DD62C;
+  --shiny-cta-highlight-subtle: #B6F299;
+
+  --animation: gradient-angle linear infinite;
+  --duration: 3s;
+  --shadow-size: 2px;
+
+  isolation: isolate;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  outline-offset: 4px;
+  color: var(--shiny-cta-fg);
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--shiny-cta-bg), var(--shiny-cta-bg)) padding-box,
+    conic-gradient(
+      from calc(var(--gradient-angle) - var(--gradient-angle-offset)),
+      transparent,
+      var(--shiny-cta-highlight) var(--gradient-percent),
+      var(--gradient-shine) calc(var(--gradient-percent) * 2),
+      var(--shiny-cta-highlight) calc(var(--gradient-percent) * 3),
+      transparent calc(var(--gradient-percent) * 4)
+    ) border-box;
+  box-shadow: inset 0 0 0 1px var(--shiny-cta-bg-subtle);
+  transition: 800ms cubic-bezier(0.25, 1, 0.5, 1);
+  transition-property: --gradient-angle-offset, --gradient-percent, --gradient-shine;
+}
+
+.shiny-cta::before,
+.shiny-cta::after,
+.shiny-cta > span::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset-inline-start: 50%;
+  inset-block-start: 50%;
+  translate: -50% -50%;
+  z-index: -1;
+}
+
+.shiny-cta::before {
+  --size: calc(100% - var(--shadow-size) * 3);
+  --position: 2px;
+  --space: calc(var(--position) * 2);
+  width: var(--size);
+  height: var(--size);
+  background:
+    radial-gradient(
+      circle at var(--position) var(--position),
+      white calc(var(--position) / 4),
+      transparent 0
+    ) padding-box;
+  background-size: var(--space) var(--space);
+  background-repeat: space;
+  mask-image: conic-gradient(
+    from calc(var(--gradient-angle) + 45deg),
+    black,
+    transparent 10% 90%,
+    black
+  );
+  border-radius: inherit;
+  opacity: 0.35;
+}
+
+.shiny-cta::after {
+  --animation: shimmer linear infinite;
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(-50deg, transparent, var(--shiny-cta-highlight), transparent);
+  mask-image: radial-gradient(circle at bottom, transparent 40%, black);
+  opacity: 0.55;
+}
+
+.shiny-cta > span {
+  z-index: 1;
+  position: relative;
+}
+
+.shiny-cta > span::before {
+  width: 100%;
+  height: 100%;
+  box-shadow: inset 0 -1ex 2rem 4px var(--shiny-cta-highlight);
+  opacity: 0;
+  transition: opacity 1500ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.shiny-cta:hover,
+.shiny-cta:focus-visible {
+  --gradient-percent: 20%;
+  --gradient-angle-offset: 95deg;
+  --gradient-shine: var(--shiny-cta-highlight-subtle);
+}
+
+.shiny-cta:hover > span::before {
+  opacity: 1;
+}
+
+@keyframes shimmer {
+  to { transform: rotate(360deg); }
+}
+
+/* ========== DOTS LUMINOUS BG (dots brancos + vinheta circular, sem borda animada) ========== */
+/* Usa background-image em camadas para funcionar em qualquer elemento,
+   mesmo os que já têm background-color ou stacking context próprio (ex.: card-glow-inner). */
+.dots-luminous {
+  background-image:
+    radial-gradient(
+      circle at center,
+      transparent 40%,
+      rgba(0, 0, 0, 0.55) 100%
+    ),
+    radial-gradient(
+      circle at 2px 2px,
+      rgba(255, 255, 255, 0.30) 0.55px,
+      transparent 0
+    );
+  background-size: 100% 100%, 4px 4px;
+  background-repeat: no-repeat, space;
+  background-position: center, 0 0;
+}
+
+@keyframes progress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+.animate-progress-10 {
+  animation: progress 10s linear forwards;
+}
+
+.animate-progress-5 {
+  animation: progress 5s linear forwards;
+}
+
+.shiny-cta,
+.shiny-cta::before,
+.shiny-cta::after {
+  animation:
+    var(--animation) var(--duration),
+    var(--animation) calc(var(--duration) / 0.4) reverse paused;
+  animation-composition: add;
+}
+
+.shiny-cta:hover,
+.shiny-cta:hover::before,
+.shiny-cta:hover::after {
+  animation-play-state: running;
 }

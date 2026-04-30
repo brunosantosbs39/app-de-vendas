@@ -54,7 +54,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#0F0F0F] p-6 text-[#F8F8F8] overflow-hidden relative">
+    <div className="flex min-h-screen items-center justify-center bg-[#0F0F0F] px-4 sm:px-6 py-6 text-[#F8F8F8] overflow-hidden relative">
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px]" />
         <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px]" />
@@ -64,7 +64,7 @@ export default function LoginPage() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="w-full max-w-lg relative z-10"
+        className="w-full max-w-md sm:max-w-lg mx-auto relative z-10"
       >
         <div className="flex flex-col items-center text-center mb-10 space-y-4">
           <motion.div
