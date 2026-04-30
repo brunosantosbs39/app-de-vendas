@@ -29,6 +29,7 @@ import {
   ArrowRight,
   ArrowDownRight,
   Sparkles,
+  Search,
   X
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -920,7 +921,7 @@ export default function Dashboard() {
                               className="h-12 bg-white/[0.03] border-white/5 rounded-xl pl-12 text-sm font-bold text-white placeholder:text-slate-600 focus-visible:ring-primary/50"
                            />
                         </div>
-                        <Select value={saleData.clientId} onValueChange={(val) => setSaleData({...saleData, clientId: val})}>
+                        <Select value={saleData.clientId} onValueChange={(val) => setSaleData({...saleData, clientId: val as string})}>
                            <SelectTrigger className="h-14 bg-white/[0.03] border border-white/5 rounded-2xl text-base font-bold px-6 focus:ring-primary/50 w-full overflow-hidden">
                               <SelectValue>
                                  {clients.find(c => c.id === saleData.clientId)?.name || "Selecione o resultado..."}
@@ -952,7 +953,7 @@ export default function Dashboard() {
                            />
                         </div>
                         <div className="flex gap-3">
-                           <Select value={saleData.productId} onValueChange={(val) => setSaleData({...saleData, productId: val})}>
+                           <Select value={saleData.productId} onValueChange={(val) => setSaleData({...saleData, productId: val as string})}>
                               <SelectTrigger className="h-14 bg-white/[0.03] border border-white/5 rounded-2xl text-base font-bold px-6 focus:ring-primary/50 flex-1 overflow-hidden">
                                  <SelectValue>
                                     {products.find(p => p.id === saleData.productId)?.name || "Selecione o ativo..."}

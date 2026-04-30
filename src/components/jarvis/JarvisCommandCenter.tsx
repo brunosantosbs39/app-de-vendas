@@ -269,9 +269,9 @@ export function JarvisCommandCenter() {
         body: JSON.stringify({ message: text, history, context: { totalRevenue: 15420.5 }, userId: user?.id })
       });
       const data = await response.json();
-      const jarvisText = data.content || "Falha na resposta neural.";
+      const jarvisText = (data.content as string) || "Falha na resposta neural.";
       
-      setHistory(prev => [...prev, { role: 'user', content: text }, { role: 'model', content: jarvisText }].slice(-10));
+      setHistory(prev => [...prev, { role: 'user' as const, content: text }, { role: 'model' as const, content: jarvisText }].slice(-10));
       
       if (lowerText.includes("vendi") || lowerText.includes("venda")) {
          if (user) {

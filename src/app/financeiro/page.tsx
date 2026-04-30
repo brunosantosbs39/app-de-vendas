@@ -419,7 +419,7 @@ export default function FinancePage() {
                 )}
 
                 {activeTab === "cobrancas" && (
-                  <TabsContent value="cobrancas" forceMount className="mt-10 space-y-6 focus-visible:outline-none">
+                  <TabsContent value="cobrancas" className="mt-10 space-y-6 focus-visible:outline-none">
                     <motion.div
                       key="cobrancas-content"
                       initial={{ opacity: 0, x: 20 }}
@@ -500,9 +500,7 @@ export default function FinancePage() {
                                           </Button>
                                           
                                           <Dialog>
-                                              <DialogTrigger asChild>
-                                                <Button className="h-14 px-4 sm:px-8 bg-primary text-background font-black uppercase text-[10px] tracking-widest rounded-2xl">Detalhes</Button>
-                                              </DialogTrigger>
+                                              <DialogTrigger render={<Button className="h-14 px-4 sm:px-8 bg-primary text-background font-black uppercase text-[10px] tracking-widest rounded-2xl">Detalhes</Button>} />
                                               <DialogContent className="bg-[#1A1A1A] border-white/10 rounded-[2.5rem] p-8 max-w-lg max-h-[90vh] overflow-y-auto">
                                                 <DialogHeader>
                                                     <DialogTitle className="text-2xl font-black uppercase tracking-tighter">Histórico de <span className="text-primary">{group.client?.name}</span></DialogTitle>
