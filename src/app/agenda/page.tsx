@@ -33,6 +33,8 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 const container = {
   hidden: { opacity: 0 },
