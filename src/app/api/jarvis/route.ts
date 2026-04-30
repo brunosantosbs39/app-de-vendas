@@ -50,11 +50,10 @@ export async function POST(req: Request) {
       }
     ];
 
-    const model = genAI.getGenerativeModel({ 
+    const model = genAI.getGenerativeModel({
       model: "gemini-1.5-flash",
-      tools: tools
+      tools: tools as any
     });
-
     const systemPrompt = "Você é o JARVIS, a interface neural ultra-avançada do consultor de elite. " +
       "Personalidade: Profissional, direto, eficiente e solícito. " +
       "REGRAS CRÍTICAS: 1. Fale SEMPRE normalmente e SOMENTE em palavras. " +

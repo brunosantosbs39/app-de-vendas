@@ -345,7 +345,7 @@ export default function FinancePage() {
 
               <AnimatePresence mode="wait">
                 {activeTab === "fluxo" && (
-                  <TabsContent value="fluxo" forceMount className="mt-10 space-y-6 focus-visible:outline-none">
+                  <TabsContent value="fluxo" className="mt-10 space-y-6 focus-visible:outline-none">
                     <motion.div
                       key="fluxo-content"
                       initial={{ opacity: 0, x: -20 }}

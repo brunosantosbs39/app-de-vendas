@@ -31,6 +31,7 @@ interface AppState {
   missions: any[];
   leader: any | null;
   levelInfo: any;
+  userProfile: any | null;
   isLoading: boolean;
   
   fetchInitialData: (userId: string) => Promise<void>;
@@ -50,6 +51,7 @@ export const useAppStore = create<AppState>((set) => ({
   missions: [],
   leader: null,
   levelInfo: computeLevel(0),
+  userProfile: null,
   isLoading: false,
 
   addClientState: (client) => set((state) => ({ clients: [client, ...state.clients] })),
@@ -68,7 +70,8 @@ export const useAppStore = create<AppState>((set) => ({
         supabase.from('notifications').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(10),
         supabase.from('leaderboard').select('*').eq('user_id', userId).single(),
         supabase.from('appointments').select('*, clients(*)').eq('user_id', userId).order('appointment_date', { ascending: true }),
-        supabase.from('daily_missions').select('*').eq('user_id', userId).eq('date', today)
+        supabase.from('daily_missions').select('*').eq('user_id', userId).eq('date', today),
+        supabase.from('profiles').select('*').eq('id', userId).single()
       ]);
 
       const [
@@ -80,7 +83,8 @@ export const useAppStore = create<AppState>((set) => ({
         { data: notifications, error: errNotifications },
         { data: lb, error: errLb },
         { data: appointments, error: errAppointments },
-        { data: missions, error: errMissions }
+        { data: missions, error: errMissions },
+        { data: profile, error: errProfile }
       ] = results;
 
       // Map clients properly for installments if needed, or rely on joins
@@ -90,7 +94,7 @@ export const useAppStore = create<AppState>((set) => ({
       }));
 
       // Log errors if any
-      const errors = { errClients, errProducts, errOrders, errInstallments, errTransactions, errNotifications, errLb, errAppointments, errMissions };
+      const errors = { errClients, errProducts, errOrders, errInstallments, errTransactions, errNotifications, errLb, errAppointments, errMissions, errProfile };
       Object.entries(errors).forEach(([key, val]) => {
         if (val && (val as any).code !== 'PGRST116') { // Ignore single() not found error
           console.error(`Erro ao carregar ${key}:`, val);
@@ -108,6 +112,7 @@ export const useAppStore = create<AppState>((set) => ({
         missions: missions || [],
         leader: lb || null,
         levelInfo: computeLevel(lb?.total_points || 0),
+        userProfile: profile || null,
         isLoading: false 
       });
     } catch (error) {

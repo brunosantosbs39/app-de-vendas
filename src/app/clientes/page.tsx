@@ -761,7 +761,7 @@ export default function ClientsPage() {
                         <Label className="text-[9px] font-black text-slate-500 uppercase ml-1 tracking-[0.2em] flex items-center gap-2">
                            <Tag size={12} className="text-primary" /> ESCOLHA O PRODUTO
                         </Label>
-                        <Select value={saleData.productId} onValueChange={(val) => setSaleData({...saleData, productId: val})}>
+                        <Select value={saleData.productId} onValueChange={(val) => setSaleData({...saleData, productId: val as string})}>
                            <SelectTrigger className="h-16 bg-white/[0.03] border border-white/5 rounded-2xl text-base font-bold px-6 focus:ring-primary/50 w-full overflow-hidden">
                               <SelectValue placeholder="Qual produto?" />
                            </SelectTrigger>

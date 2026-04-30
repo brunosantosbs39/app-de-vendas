@@ -1284,7 +1284,7 @@ export default function CommunityPage() {
                       placeholder="Sua mensagem elite..."
                       className="bg-transparent border-none h-12 text-sm focus-visible:ring-0 placeholder:text-slate-700"
                    />
-                   <Button onClick={handleSendMessage} className="bg-[#5DD62C] text-[#0E150B] h-12 w-12 rounded-full p-0 shadow-lg shadow-[#5DD62C]/20 hover:scale-105 active:scale-95 transition-all">
+                   <Button onClick={() => handleSendMessage()} className="bg-[#5DD62C] text-[#0E150B] h-12 w-12 rounded-full p-0 shadow-lg shadow-[#5DD62C]/20 hover:scale-105 active:scale-95 transition-all">
                       <Send size={20} />
                    </Button>
                 </div>
