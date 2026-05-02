@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { offlineStore, SyncItem } from '@/lib/offlineStore';
@@ -7,9 +9,15 @@ export function useSyncManager() {
   const [pendingItems, setPendingItems] = useState(0);
 
   const processSyncQueue = async () => {
-    if (isSyncing || !navigator.onLine) return;
+    if (isSyncing || (typeof navigator !== 'undefined' && !navigator.onLine)) return;
 
-    const queue = await offlineStore.getSyncQueue();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      setPendingItems(0);
+      return;
+    }
+
+    const queue = await offlineStore.getSyncQueue(user.id);
     if (queue.length === 0) {
       setPendingItems(0);
       return;
@@ -28,10 +36,12 @@ export function useSyncManager() {
             .upsert(item.data);
           error = upsertError;
         } else if (item.action === 'DELETE') {
-          const { error: deleteError } = await supabase
+          let query = supabase
             .from(item.table)
             .delete()
             .eq('id', item.data.id);
+          query = query.eq('user_id', user.id);
+          const { error: deleteError } = await query;
           error = deleteError;
         }
 
@@ -48,7 +58,7 @@ export function useSyncManager() {
     }
 
     setIsSyncing(false);
-    const remaining = await offlineStore.getSyncQueue();
+    const remaining = await offlineStore.getSyncQueue(user.id);
     setPendingItems(remaining.length);
   };
 
@@ -80,3 +90,4 @@ export function useSyncManager() {
 
   return { isSyncing, pendingItems };
 }
+

@@ -1,6 +1,6 @@
 # Story: UI-4 - Funcionalidade de Edição de Meta no Dashboard
 
-**Status:** Ready for Dev
+**Status:** Done
 **Agent Responsável:** @dev (Dex)
 
 ## Contexto
@@ -14,10 +14,10 @@ O botão "Alterar Meta" no Dashboard foi adicionado visualmente, mas não possui
 ## Critérios de Aceitação
 
 ### 1. Dashboard (app/page.tsx)
-- [ ] Refatorar a Meta de Vendas para usar um estado `goalValue` (ex: 10000) e `currentSales` (ex: 7500).
-- [ ] O componente `Dialog` deve conter um `Label` ("Nova Meta"), um `Input` (tipo numérico) e um `Button` ("Salvar").
-- [ ] Ao salvar no Dialog, o estado `goalValue` deve ser atualizado e o modal fechado.
-- [ ] A porcentagem exibida (ex: 75%) e a barra de progresso do Framer Motion devem refletir a nova proporção `(currentSales / goalValue) * 100`.
+- [x] Refatorar a Meta de Vendas para usar um estado `goalValue` (ex: 10000) e `currentSales` (ex: 7500).
+- [x] O componente `Dialog` deve conter um `Label` ("Nova Meta"), um `Input` (tipo numérico) e um `Button` ("Salvar").
+- [x] Ao salvar no Dialog, o estado `goalValue` deve ser updated e o modal fechado.
+- [x] A porcentagem exibida (ex: 75%) e a barra de progresso do Framer Motion devem refletir a nova proporção `(currentSales / goalValue) * 100`.
 
 ## Instruções Técnicas
 - Utilize os componentes de `src/components/ui/dialog.tsx`, `input.tsx` e `label.tsx`.

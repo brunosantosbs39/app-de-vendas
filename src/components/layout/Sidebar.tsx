@@ -74,7 +74,7 @@ export function Sidebar() {
           className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all active:scale-95"
         >
           {profile?.avatar_url ? (
-            <img src={profile.avatar_url} className="w-8 h-8 rounded-lg object-cover" />
+            <img src={profile.avatar_url} alt="" className="w-8 h-8 rounded-lg object-cover" />
           ) : (
             <Menu className="text-white" size={24} />
           )}

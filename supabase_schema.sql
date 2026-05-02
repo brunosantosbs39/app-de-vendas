@@ -8,6 +8,7 @@ CREATE TABLE clients (
   phone TEXT,
   email TEXT,
   address TEXT,
+  store_name TEXT,
   region TEXT,
   latitude DECIMAL(9,6), -- Coordenada para o mapa
   longitude DECIMAL(9,6), -- Coordenada para o mapa

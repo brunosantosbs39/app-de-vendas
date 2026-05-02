@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from './useAuth';
@@ -112,3 +114,4 @@ export function useProfile(userId?: string) {
 
   return { profile, loading, updateProfile, uploadAvatar, refreshProfile: fetchProfile };
 }
+

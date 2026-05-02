@@ -1,15 +1,38 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 // Jarvis Neural Core - Revitalizado
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { cookies } from "next/headers";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { env } from "@/lib/env";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
+async function createAuthenticatedClient() {
+  const cookieStore = await cookies();
+
+  return createServerClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY, {
+    cookies: {
+      get(name: string) {
+        return cookieStore.get(name)?.value;
+      },
+      set(name: string, value: string, options: CookieOptions) {
+        cookieStore.set({ name, value, ...options });
+      },
+      remove(name: string, options: CookieOptions) {
+        cookieStore.set({ name, value: "", ...options });
+      },
+    },
+  });
+}
 
 export async function POST(req: Request) {
   try {
-    const { message, context, history, userId } = await req.json();
+    const supabase = await createAuthenticatedClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return NextResponse.json({ content: "Sessão expirada. Faça login novamente." }, { status: 401 });
+    }
+
+    const userId = user.id;
+    const { message, context, history } = await req.json();
 
     const apiKey = process.env.GEMINI_API_KEY; 
     if (!apiKey) throw new Error("GEMINI_API_KEY não configurada");

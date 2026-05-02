@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/useAuth';
@@ -19,19 +21,24 @@ export function useOrders() {
   const loadOrders = async () => {
     try {
       setLoading(true);
+      if (!user) {
+        setOrders([]);
+        return;
+      }
 
-      const cached = await offlineStore.getFromCache('orders');
+      const cached = await offlineStore.getFromCache('orders', user.id);
       if (cached.length > 0) setOrders(cached);
 
       if (navigator.onLine && user) {
         const { data, error } = await supabase
           .from('orders')
           .select('*')
+          .eq('user_id', user.id)
           .order('created_at', { ascending: false });
 
         if (!error && data) {
           setOrders(data);
-          await offlineStore.saveToCache('orders', data);
+          await offlineStore.saveToCache('orders', data, user.id);
         }
       }
     } catch (error) {
@@ -50,3 +57,4 @@ export function useOrders() {
 
   return { orders, loading, refreshOrders: loadOrders };
 }
+

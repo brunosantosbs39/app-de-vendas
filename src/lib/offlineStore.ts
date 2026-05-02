@@ -11,6 +11,7 @@ export interface SyncItem {
   table: string;
   action: 'INSERT' | 'UPDATE' | 'DELETE';
   data: any;
+  user_id: string;
   timestamp: number;
 }
 
@@ -47,36 +48,44 @@ class OfflineStore {
 
   // --- Operações de Cache (Leitura) ---
 
-  async saveToCache(table: string, data: any[]) {
+  async saveToCache(table: string, data: any[], userId: string) {
     await this.init();
     const tx = this.db!.transaction(table, 'readwrite');
     const store = tx.objectStore(table);
-    
-    // Limpa o cache antigo antes de salvar o novo do servidor
-    store.clear();
+
+    const existing = await new Promise<any[]>((resolve) => {
+      const request = store.getAll();
+      request.onsuccess = () => resolve(request.result || []);
+      request.onerror = () => resolve([]);
+    });
+    existing
+      .filter((item) => item.user_id === userId)
+      .forEach((item) => store.delete(item.id));
+
     data.forEach(item => store.put(item));
     return new Promise((resolve) => tx.oncomplete = resolve);
   }
 
-  async getFromCache(table: string): Promise<any[]> {
+  async getFromCache(table: string, userId: string): Promise<any[]> {
     await this.init();
     return new Promise((resolve) => {
       const tx = this.db!.transaction(table, 'readonly');
       const store = tx.objectStore(table);
       const request = store.getAll();
-      request.onsuccess = () => resolve(request.result);
+      request.onsuccess = () => resolve((request.result || []).filter((item: any) => item.user_id === userId));
     });
   }
 
   // --- Fila de Sincronização (Escrita) ---
 
-  async addToSyncQueue(table: string, action: SyncItem['action'], data: any) {
+  async addToSyncQueue(table: string, action: SyncItem['action'], data: any, userId: string) {
     await this.init();
     const syncItem: SyncItem = {
       id: crypto.randomUUID(),
       table,
       action,
       data,
+      user_id: userId,
       timestamp: Date.now()
     };
 
@@ -95,13 +104,13 @@ class OfflineStore {
     return new Promise((resolve) => tx.oncomplete = resolve);
   }
 
-  async getSyncQueue(): Promise<SyncItem[]> {
+  async getSyncQueue(userId: string): Promise<SyncItem[]> {
     await this.init();
     return new Promise((resolve) => {
       const tx = this.db!.transaction('sync_queue', 'readonly');
       const store = tx.objectStore('sync_queue');
       const request = store.getAll();
-      request.onsuccess = () => resolve(request.result || []);
+      request.onsuccess = () => resolve((request.result || []).filter((item: SyncItem) => item.user_id === userId));
     });
   }
 

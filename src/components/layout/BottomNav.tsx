@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, Package, Trophy, MessageCircle, Bot, GraduationCap, CalendarDays, Banknote } from "lucide-react";
+import { LayoutDashboard, Users, Trophy, CalendarDays, Banknote } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 
 const items = [
   { icon: LayoutDashboard, label: "Home", href: "/" },
@@ -16,8 +16,11 @@ const items = [
 
 export function BottomNav() {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
-  // Não mostrar navegação em telas de autenticação ou boas-vindas
+  if (!mounted) return null;
+
   const hideRoutes = ["/login", "/auth", "/register", "/welcome", "/onboarding"];
   if (hideRoutes.some(route => pathname?.startsWith(route))) {
     return null;
@@ -36,11 +39,7 @@ export function BottomNav() {
             >
               <div className="relative flex flex-col items-center justify-center w-14 h-14">
                 {isActive && (
-                  <motion.div
-                    layoutId="activeNav"
-                    className="absolute inset-0 bg-primary rounded-2xl -z-10 shadow-[0_0_25px_rgba(93,214,44,0.4)]"
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                  />
+                  <div className="absolute inset-0 bg-primary rounded-2xl -z-10 shadow-[0_0_25px_rgba(93,214,44,0.4)]" />
                 )}
                 <item.icon 
                   className={cn(

@@ -4,7 +4,7 @@ import { env } from "@/lib/env";
 
 const PUBLIC_PATHS = ["/login", "/auth/callback"];
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request: { headers: request.headers } });
 
   const supabase = createServerClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY, {

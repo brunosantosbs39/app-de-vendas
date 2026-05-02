@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/useAuth';
@@ -23,9 +25,13 @@ export function useProducts() {
   const loadProducts = async () => {
     try {
       setLoading(true);
+      if (!user) {
+        setProducts([]);
+        return;
+      }
       
       // 1. Tenta carregar do Cache Local IMEDIATAMENTE
-      const cached = await offlineStore.getFromCache('products');
+      const cached = await offlineStore.getFromCache('products', user.id);
       if (cached.length > 0) {
         setProducts(cached);
       }
@@ -35,11 +41,12 @@ export function useProducts() {
         const { data, error } = await supabase
           .from('products')
           .select('*')
+          .eq('user_id', user.id)
           .order('name', { ascending: true });
 
         if (!error && data) {
           setProducts(data);
-          await offlineStore.saveToCache('products', data);
+          await offlineStore.saveToCache('products', data, user.id);
         }
       }
     } catch (error) {
@@ -54,7 +61,7 @@ export function useProducts() {
       loadProducts();
     }, 0);
     return () => clearTimeout(timer);
-  }, []);
+  }, [user]);
 
   const addProduct = async (productData: Omit<Product, 'id'>) => {
     if (!user) throw new Error("Sessão expirada.");
@@ -69,7 +76,7 @@ export function useProducts() {
       };
 
       // SALVA LOCALMENTE E ADICIONA NA FILA DE SYNC
-      await offlineStore.addToSyncQueue('products', 'INSERT', newProduct);
+      await offlineStore.addToSyncQueue('products', 'INSERT', newProduct, user.id);
       
       // Atualiza a UI imediatamente
       setProducts(prev => [...prev, newProduct as any].sort((a, b) => a.name.localeCompare(b.name)));
@@ -82,8 +89,10 @@ export function useProducts() {
   };
 
   const deleteProduct = async (productId: string) => {
+    if (!user) return { success: false, error: "Usuário não autenticado" };
+
     try {
-      await offlineStore.addToSyncQueue('products', 'DELETE', { id: productId });
+      await offlineStore.addToSyncQueue('products', 'DELETE', { id: productId, user_id: user.id }, user.id);
       setProducts(prev => prev.filter(p => p.id !== productId));
       return { success: true };
     } catch (error) {
@@ -93,3 +102,4 @@ export function useProducts() {
 
   return { products, loading, addProduct, deleteProduct, refreshProducts: loadProducts };
 }
+

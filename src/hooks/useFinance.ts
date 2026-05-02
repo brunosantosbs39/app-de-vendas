@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/useAuth';
@@ -28,9 +30,13 @@ export function useFinance() {
   const loadFinanceData = async () => {
     try {
       setLoading(true);
+      if (!user) {
+        setExpenses([]);
+        return;
+      }
       
       // Carrega do Cache
-      const cachedExpenses = await offlineStore.getFromCache('expenses');
+      const cachedExpenses = await offlineStore.getFromCache('expenses', user.id);
       if (cachedExpenses.length > 0) setExpenses(cachedExpenses);
 
       // Se online, atualiza do servidor
@@ -38,11 +44,12 @@ export function useFinance() {
         const { data: expData, error: expError } = await supabase
           .from('expenses')
           .select('*')
+          .eq('user_id', user.id)
           .order('date', { ascending: false });
 
         if (!expError && expData) {
           setExpenses(expData);
-          await offlineStore.saveToCache('expenses', expData);
+          await offlineStore.saveToCache('expenses', expData, user.id);
         }
       }
     } catch (error) {
@@ -68,7 +75,7 @@ export function useFinance() {
         user_id: user.id
       };
 
-      await offlineStore.addToSyncQueue('expenses', 'INSERT', newExpense);
+      await offlineStore.addToSyncQueue('expenses', 'INSERT', newExpense, user.id);
       setExpenses(prev => [newExpense as any, ...prev]);
 
       return { success: true };
@@ -80,3 +87,4 @@ export function useFinance() {
 
   return { expenses, scheduledSales, loading, addExpense, refreshFinance: loadFinanceData };
 }
+

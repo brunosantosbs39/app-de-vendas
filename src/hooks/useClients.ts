@@ -1,5 +1,8 @@
+"use client";
+
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface Client {
   id: string;
@@ -13,15 +16,21 @@ export interface Client {
 }
 
 export function useClients() {
+  const { user } = useAuth();
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchClients = async () => {
     try {
+      if (!user) {
+        setClients([]);
+        return;
+      }
       const { data, error } = await supabase
         .from('clients')
         .select('*')
+        .eq('user_id', user.id)
         .order('name', { ascending: true });
 
       if (error) throw error;
@@ -60,10 +69,13 @@ export function useClients() {
 
   const updateClient = async (id: string, updates: Partial<Omit<Client, 'id'>>) => {
     try {
+      if (!user) throw new Error('Usuário não autenticado');
+
       const { data, error } = await supabase
         .from('clients')
         .update(updates)
         .eq('id', id)
+        .eq('user_id', user.id)
         .select()
         .single();
 
@@ -81,7 +93,8 @@ export function useClients() {
       fetchClients();
     }, 0);
     return () => clearTimeout(timer);
-  }, []);
+  }, [user]);
 
   return { clients, loading, error, addClient, updateClient, refresh: fetchClients };
 }
+

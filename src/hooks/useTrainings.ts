@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/useAuth';
@@ -96,3 +98,4 @@ export function useTrainings() {
 
   return { trainings, loading, addTraining, refreshTrainings: fetchTrainings };
 }
+

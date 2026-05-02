@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 
@@ -74,7 +76,10 @@ export function useIntelligence() {
       if (!user) return;
 
       // 1. Orders (all + today)
-      const { data: allOrders } = await supabase.from('orders').select('id,total_amount,status,created_at');
+      const { data: allOrders } = await supabase
+        .from('orders')
+        .select('id,total_amount,status,created_at')
+        .eq('user_id', user.id);
       const ordersToday = (allOrders ?? []).filter(o => new Date(o.created_at) >= today);
       const salesSum = ordersToday.reduce((s, o) => s + Number(o.total_amount || 0), 0);
       const activeOrders = (allOrders ?? []).filter(o => ['pending', 'paid'].includes(o.status)).length;
@@ -89,9 +94,13 @@ export function useIntelligence() {
         : 0;
 
       // 3. Top Product (by order_items count)
-      const { data: items } = await supabase
-        .from('order_items')
-        .select('product_id, quantity, products:product_id(name)');
+      const orderIds = (allOrders ?? []).map((order) => order.id);
+      const { data: items } = orderIds.length > 0
+        ? await supabase
+          .from('order_items')
+          .select('product_id, quantity, products:product_id(name), order_id')
+          .in('order_id', orderIds)
+        : { data: [] };
       const productTotals: Record<string, { name: string; qty: number }> = {};
       items?.forEach((it: any) => {
         const pname = it.products?.name || 'Desconhecido';
@@ -103,7 +112,7 @@ export function useIntelligence() {
         || 'Kit Nutrição Turbo';
 
       // 4. Best region from clients
-      const { data: clientsData } = await supabase.from('clients').select('region');
+      const { data: clientsData } = await supabase.from('clients').select('region').eq('user_id', user.id);
       const regions: Record<string, number> = {};
       clientsData?.forEach(c => {
         if (c.region) regions[c.region] = (regions[c.region] || 0) + 1;
@@ -128,6 +137,7 @@ export function useIntelligence() {
       const { data: clientsToday } = await supabase
         .from('clients')
         .select('id')
+        .eq('user_id', user.id)
         .gte('created_at', today.toISOString());
       const newClientsToday = clientsToday?.length || 0;
 
@@ -194,3 +204,4 @@ export function useIntelligence() {
 
   return { metrics, leader, levelInfo, challenges, loading, refreshIntelligence: fetchIntelligence };
 }
+

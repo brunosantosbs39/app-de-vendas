@@ -1,6 +1,6 @@
 # Story: UI-3 - Refinamento de Ícones e Funcionalidade de Meta
 
-**Status:** Ready for Dev
+**Status:** Done
 **Agent Responsável:** @dev (Dex)
 
 ## Contexto
@@ -13,12 +13,12 @@ O usuário solicitou a correção visual do ícone de Finanças para refletir me
 ## Critérios de Aceitação
 
 ### 1. Navegação (components/layout/BottomNav.tsx)
-- [ ] Trocar o ícone do item "Finanças" de `MessageCircle` para `Banknote` (ou `DollarSign` se preferir).
-- [ ] Garantir que o rótulo continue sendo "Finanças".
+- [x] Trocar o ícone do item "Finanças" de `MessageCircle` para `Banknote` (ou `DollarSign` se preferir).
+- [x] Garantir que o rótulo continue sendo "Finanças".
 
 ### 2. Dashboard (app/page.tsx)
-- [ ] Na seção "Meta de Vendas", adicionar um `Button` (variante `ghost` ou `outline` pequena) com o ícone `Settings2` ou `Edit3` para permitir a alteração da meta.
-- [ ] O botão deve estar posicionado de forma elegante ao lado do título "Meta de Vendas".
+- [x] Na seção "Meta de Vendas", adicionar um `Button` (variante `ghost` ou `outline` pequena) com o ícone `Settings2` ou `Edit3` para permitir a alteração da meta.
+- [x] O botão deve estar posicionado de forma elegante ao lado do título "Meta de Vendas".
 
 ## Instruções Técnicas
 - Utilize os ícones da biblioteca `lucide-react`.
